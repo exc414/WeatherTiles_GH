@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- These colors follow google name convention as they are defaults. -->
+    <color name="colorPrimary">#161616</color>
+    <color name="colorPrimaryDark">#25242A</color>
+    <color name="colorAccent">#9F9E9E</color>
+    <color name="colorAccentMain">#E0E0E0</color>
+    <color name="colorAccentForExtremeDark">#CCCCCC</color>
+    <color name="colorAccentDrawer">#CCCCCC</color>
+
+    <!-- Tile labels -->
+    <color name="lblTemp">@color/colorAccent</color>
+    <color name="lblLocation">#757575</color>
+
+    <!-- Tile -->
+    <color name="divider">#2F2f2F</color>
+    <color name="tileBackground">#1F1F1F</color>
+    <color name="tileBackgroundSelected">#30353A</color>
+
+    <!-- Snack View -->
+    <color name="snackViewBackground">#323232</color>
+
+    <!-- Search activity -->
+    <color name="semiTransparentBlack">#00000000</color>
+    <color name="searchBackground">#1F1F1F</color>
+    <color name="colorControlNormal">#A27929</color>
+    <color name="colorControlActivated">#EAA201</color>
+
+    <!-- About Button -->
+    <color name="aboutButtonBase">#A27929</color>
+    <color name="aboutButtonPressed">#EAA201</color>
+
+    <!-- Tile Colors Day/Night -->
+    <color name="sunYellow">#FAAD00</color>
+    <color name="moonBlue">#0097FF</color>
+    <color name="dayNight">#FAAD00</color>
+
+</resources>

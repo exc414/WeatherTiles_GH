@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+    <!-- Ignore the lint above into making this a compound drawable. The image view does not
+    scale correctly. Also you cannot control the top margin correctly on it either and it will
+    look off when compare to the text. -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="@dimen/drawer_header_icon_padding"
+        android:layout_marginStart="@dimen/drawer_header_icon_padding"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="@dimen/drawer_header_icon_padding_top"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/logo_for_drawer_48dp"
+        android:contentDescription="@string/drawer_header_app_icon" />
+
+    <TextView
+        android:id="@+id/lblAppName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="@string/drawer_header_text"
+        android:textColor="@color/colorAccentDrawer"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

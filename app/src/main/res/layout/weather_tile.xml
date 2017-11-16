@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/tileRelativeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginStart="1dp"
+                android:background="@drawable/weather_tile_background_selector"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <io.bluephoenix.weathertiles.ui.views.WeatherView
+                    android:id="@+id/tileView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    custom:weatherIconContent="200"
+                    custom:weatherIconTextSize="@dimen/weather_view_weather_icon_text_size"
+                    custom:weatherIconColor="@color/colorAccent"
+                    custom:tempContent="@string/temp_placeholder"
+                    custom:tempTextSize="@dimen/weather_view_temp_text_size"
+                    custom:tempColor="@color/colorAccentMain"
+                    custom:cityContent="@string/city_placeholder"
+                    custom:cityTextSize="@dimen/weather_view_city_text_size"
+                    custom:cityColor="@color/colorAccent"
+                    custom:countryContent="@string/country_placeholder"
+                    custom:countryTextSize="@dimen/weather_view_country_text_size"
+                    custom:countryColor="@color/colorAccent"
+                    custom:spaceAfterIcon="12dp"
+                    custom:spaceAfterTemp="2dp"
+                    custom:spaceAfterCity="2dp"
+                    custom:spaceAfterCountry="14dp"
+                    custom:marginOffset="0dp"
+                    custom:numberOfColumns="@integer/grid_columns"/>
+
+                <ImageView
+                    android:id="@+id/imgOverlay"
+                    android:layout_alignEnd="@+id/tileView"
+                    android:layout_alignRight="@+id/tileView"
+                    android:layout_alignBottom="@+id/tileView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/close_icon_description"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/weather_tile_drag_to_delete_overlay"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+
+        </RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- =========================== Button ====================================== -->
+    <style name="BorderlessBtn" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:minWidth">16dp</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <!-- =========================== Toolbar ===================================== -->
+    <style name="ToolbarTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColorPrimary">@color/colorAccentMain</item>
+        <item name="android:textColorSecondary">@color/colorAccentMain</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Theme.AppCompat">
+        <item name="actionMenuTextColor">@color/colorAccentMain</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <!-- Change the hamburger and arrow button color -->
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/colorAccentMain</item>
+    </style>
+
+    <!-- =========================== Weather Tile ================================= -->
+    <style name="TempTileAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/lblTemp</item>
+    </style>
+
+    <style name="LocationTileAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/lblLocation</item>
+    </style>
+
+    <!-- =========================== Autocomplete ================================= -->
+    <style name="Autocomplete">
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="colorControlActivated">@color/colorControlActivated</item>
+    </style>
+
+</resources>

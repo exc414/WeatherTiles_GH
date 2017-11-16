@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeatherView">
+
+        <!-- Weather Icon (Uses custom font) default content -->
+        <attr name="weatherIconContent" format="string" />
+        <attr name="weatherIconTextSize" format="dimension" />
+        <attr name="weatherIconColor" format="color" />
+
+        <attr name="spaceAfterIcon" format="dimension" />
+
+        <attr name="tempContent" format="string" />
+        <attr name="tempTextSize" format="dimension" />
+        <attr name="tempColor" format="color" />
+
+        <attr name="spaceAfterTemp" format="dimension" />
+
+        <attr name="cityContent" format="string" />
+        <attr name="cityTextSize" format="dimension" />
+        <attr name="cityColor" format="color" />
+
+        <attr name="spaceAfterCity" format="dimension" />
+
+        <attr name="countryContent" format="string" />
+        <attr name="countryTextSize" format="dimension" />
+        <attr name="countryColor" format="color" />
+
+        <attr name="spaceAfterCountry" format="dimension" />
+
+        <attr name="marginOffset" format="dimension" />
+
+        <attr name="numberOfColumns" format="integer" />
+    </declare-styleable>
+</resources>

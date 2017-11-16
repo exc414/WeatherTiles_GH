@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <io.bluephoenix.weathertiles.ui.views.CityAutoCompleteView
+        android:id="@+id/searchCity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="16dp"
+        android:dropDownVerticalOffset="8dp"
+        android:background="@drawable/auto_complete_background"
+        android:focusableInTouchMode="true"
+        android:hint="@string/hint_search_city"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:paddingLeft="64dp"
+        android:paddingStart="64dp"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
+        android:textColor="@color/colorAccentMain"
+        android:textColorHint="@color/colorAccent"
+        android:textSize="16sp"
+        android:theme="@style/Autocomplete"/>
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignLeft="@+id/searchCity"
+        android:layout_alignStart="@+id/searchCity"
+        android:layout_alignTop="@+id/searchCity"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_arrow_back_grey_300_24dp"
+        android:contentDescription="@string/content_description_back_button"/>
+
+</RelativeLayout>

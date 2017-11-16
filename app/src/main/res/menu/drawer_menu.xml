@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_actions"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/addTile"
+            android:icon="@drawable/ic_add_circle_outline_grey_300_24dp"
+            android:title="@string/drawer_add_tile" />
+
+        <item
+            android:id="@+id/sortTile"
+            android:icon="@drawable/ic_sort_grey_300_24dp"
+            android:title="@string/drawer_sort" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_grey_300_24dp"
+            android:title="@string/drawer_settings" />
+
+    </group>
+
+    <group
+        android:id="@+id/menuShare"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/shareApp"
+            android:icon="@drawable/ic_share_grey_300_24dp"
+            android:title="@string/drawer_share"/>
+
+        <item
+            android:id="@+id/rateApp"
+            android:icon="@drawable/ic_star_grey_300_24dp"
+            android:title="@string/drawer_rate"/>
+
+        <item
+            android:id="@+id/leaveFeedback"
+            android:icon="@drawable/ic_feedback_grey_300_24dp"
+            android:title="@string/drawer_leave_feedback" />
+
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_account_box_grey_300_24dp"
+            android:title="@string/drawer_about"/>
+
+    </group>
+
+    <item android:title="@string/drawer_item_more_apps">
+
+        <menu>
+
+            <item
+                android:id="@+id/quoteMachine"
+                android:icon="@drawable/ic_file_download_grey_300_24dp"
+                android:title="@string/drawer_quote_machine"/>
+
+            <item
+                android:id="@+id/appUninstaller"
+                android:icon="@drawable/ic_file_download_grey_300_24dp"
+                android:title="@string/drawer_app_uninstaller"/>
+
+            <item
+                android:id="@+id/clearHandset"
+                android:icon="@drawable/ic_file_download_grey_300_24dp"
+                android:title="@string/drawer_clear_handset"/>
+
+            <item
+                android:id="@+id/stressCPU"
+                android:icon="@drawable/ic_file_download_grey_300_24dp"
+                android:title="@string/drawer_stress_cpu"/>
+
+            <!-- Creates padding on the bottom -->
+            <item
+                android:title=""/>
+        </menu>
+
+    </item>
+
+</menu>

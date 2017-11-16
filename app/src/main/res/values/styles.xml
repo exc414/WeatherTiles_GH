@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base app theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Background color of all activities -->
+        <item name="android:windowBackground">@color/colorPrimary</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/colorAccentMain</item>
+        <item name="preferenceTheme">@style/Theme.Preferences</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+
+    </style>
+
+    <style name="Theme.Preferences" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="colorAccent">@color/dayNight</item>
+        <item name="android:textColorPrimary">@color/colorAccentForExtremeDark</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="android:colorControlHighlight">@color/tileBackgroundSelected</item>
+    </style>
+
+    <style name="Theme.TransparentSearch" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/semiTransparentBlack</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="DrawerTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <!-- Color of text and icon when SELECTED -->
+        <!--<item name="colorPrimary">@color/drawerSelected</item> -->
+        <!--<item name="colorAccent">@color/drawerSelected</item> -->
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@android:color/transparent</item>
+    </style>
+
+</resources>

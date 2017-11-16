@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="io.bluephoenix.weathertiles.ui.activities.WeatherActivity">
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_add_circle_outline_grey_300_24dp"
+        android:title="@string/add_button_toolbar_title"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_change_degrees"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_temperature_celsius_grey_300_24dp"
+        android:title="@string/change_degrees_button_toolbar_title"
+        app:showAsAction="ifRoom" />
+
+</menu>
