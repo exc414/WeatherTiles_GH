@@ -51,8 +51,8 @@ WEATHER_BIT_API_KEY="YOUR-API-KEY-HERE"
 
 ### App Images
 
-![Tiles](app_img/tiles.png?raw=true "Tiles"  width="300") ![Tiles](app_img/sort.png?raw=true "Tiles"  width="300")
-![Tiles](app_img/search.png?raw=true "Tiles"  width="300") ![Tiles](app_img/settings.png?raw=true "Tiles"  width="300")
+![Tiles](app_img/tiles.png?raw=true "Tiles"  width="300") ![Sort](app_img/sort.png?raw=true "Sort"  width="300")
+![Search](app_img/search.png?raw=true "Search"  width="300") ![Settings](app_img/settings.png?raw=true "Settings"  width="300")
 
 <br>
 
