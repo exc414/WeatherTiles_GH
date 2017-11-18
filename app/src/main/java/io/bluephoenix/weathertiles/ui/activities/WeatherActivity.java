@@ -39,6 +39,7 @@ import io.bluephoenix.weathertiles.ui.dialogs.Dialogs;
 import io.bluephoenix.weathertiles.ui.dialogs.DialogsPublish;
 import io.bluephoenix.weathertiles.ui.views.SnackView;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.GLMWithSmoothScroller;
+import io.bluephoenix.weathertiles.ui.views.reyclerview.TileDecorator;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.TileItemAnimator;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.WeatherRecyclerView;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.gestures.DragDropSwipeHelper;
@@ -125,6 +126,10 @@ public class WeatherActivity extends BaseActivity implements
         ItemTouchHelper.Callback callback = new DragDropSwipeHelper(weatherAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(weatherRecyclerView);
+
+        int tilePadding = getResources().getDimensionPixelSize(
+                R.dimen.weather_recyclerview_margin_children);
+        weatherRecyclerView.addItemDecoration(new TileDecorator(tilePadding));
 
         //Create a share preference object to be passed to the presenter.
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(

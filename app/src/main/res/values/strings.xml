@@ -3,6 +3,7 @@
     <!-- ============================= General ==================================== -->
 
     <string name="app_name">Weather Tiles</string>
+    <string name="app_name_details">Weather Details</string>
 
     <!-- ========================= Settings Activity ============================== -->
 

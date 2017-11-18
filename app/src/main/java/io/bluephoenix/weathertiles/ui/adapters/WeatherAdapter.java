@@ -347,7 +347,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
             IDragDropSwipeHelper.ViewHolder
     {
         @BindView(R.id.tileView) WeatherView tileView;
-        @BindView(R.id.imgOverlay) ImageView overlay;
 
         TileHolder(View itemView)
         {

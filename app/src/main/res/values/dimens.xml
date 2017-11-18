@@ -17,9 +17,14 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_search_city">16dp</dimen>
     <dimen name="activity_vertical_search_city">16dp</dimen>
-
-    <dimen name="activity_weather">4dp</dimen>
     <dimen name="ic_clear_margin">16dp</dimen>
+
+    <!-- Weather RecyclerView / Custom Weather View -->
+    <dimen name="weather_recyclerview_margin">2dp</dimen>
+    <dimen name="weather_recyclerview_margin_children">2dp</dimen>
+    <!-- This value will always be double of margin_children -->
+    <dimen name="weather_recyclerview_marin_offset_weather_view">4dp</dimen>
+
 
     <!-- Drawer Normal Dimensions-->
     <dimen name="drawer_header_icon_padding">16dp</dimen>
