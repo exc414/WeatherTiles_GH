@@ -20,6 +20,7 @@
 
 * Display weather for information for different cities.
 * Up to 40 at the same time in a grid style.
+* Tap a tile to receive forecast information for the city.
 * Weather and day/night information will automatically update itself through the day.
 * Change between Celsius and Fahrenheit.
 * Sort based on temperature, day or night and alphabetically order.
