@@ -63,11 +63,6 @@
                 android:title="@string/drawer_app_uninstaller"/>
 
             <item
-                android:id="@+id/clearHandset"
-                android:icon="@drawable/ic_file_download_grey_300_24dp"
-                android:title="@string/drawer_clear_handset"/>
-
-            <item
                 android:id="@+id/stressCPU"
                 android:icon="@drawable/ic_file_download_grey_300_24dp"
                 android:title="@string/drawer_stress_cpu"/>

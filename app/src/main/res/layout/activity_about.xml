@@ -267,57 +267,6 @@
                 app:layout_constraintWidth_max="100dp"/>
 
             <ImageView
-                android:id="@+id/bgWB"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/content_description_bgAuto"
-                android:minHeight="116dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bgOWM"
-                app:layout_constraintWidth_max="400dp"
-                app:srcCompat="@drawable/round_rect_shape_background"/>
-
-            <TextView
-                android:id="@+id/lblWB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/about_wb_api"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccentMain"
-                android:textSize="16sp"
-                app:layout_constraintLeft_toLeftOf="@+id/bgWB"
-                app:layout_constraintRight_toRightOf="@+id/bgWB"
-                app:layout_constraintTop_toTopOf="@+id/bgWB"/>
-
-            <Button
-                android:id="@+id/btnWB"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/about_blue_btn_background"
-                android:text="@string/about_btn_visit_api"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccentMain"
-                app:layout_constraintBottom_toBottomOf="@+id/bgWB"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblWB"
-                app:layout_constraintWidth_max="100dp"/>
-
-            <ImageView
                 android:id="@+id/dividerThird"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
@@ -329,7 +278,7 @@
                 android:layerType="software"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bgWB"
+                app:layout_constraintTop_toBottomOf="@+id/bgOWM"
                 app:layout_constraintWidth_max="400dp"
                 app:srcCompat="@drawable/about_divider"/>
 
@@ -397,25 +346,10 @@
                 android:minWidth="10dp"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/bgMoreApps"
-                app:layout_constraintEnd_toStartOf="@+id/imgBtnClearHandset"
+                app:layout_constraintEnd_toStartOf="@+id/imgBtnStressCPU"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imgBtnQuoteMachine"
                 app:srcCompat="@drawable/app_uninstaller"/>
-
-            <ImageButton
-                android:id="@+id/imgBtnClearHandset"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/more_apps_content_description"
-                android:minWidth="10dp"
-                android:padding="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/bgMoreApps"
-                app:layout_constraintEnd_toStartOf="@+id/imgBtnStressCPU"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imgBtnAppUninstaller"
-                app:srcCompat="@drawable/clear_handset"/>
 
             <ImageButton
                 android:id="@+id/imgBtnStressCPU"
@@ -431,7 +365,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/bgMoreApps"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imgBtnClearHandset"
+                app:layout_constraintStart_toEndOf="@+id/imgBtnAppUninstaller"
                 app:srcCompat="@drawable/stress_cpu"/>
 
         </android.support.constraint.ConstraintLayout>

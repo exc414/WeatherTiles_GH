@@ -6,10 +6,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +19,13 @@ import io.bluephoenix.weathertiles.util.Util;
 /**
  * @author Carlos A. Perez Zubizarreta
  */
-public class SnackView extends View
+public class SnackView extends BaseView
 {
     private final Handler dismissSnackBar = new Handler();
 
     //View width and height
     private float viewWidth = 0;
     private float viewHeight = 0;
-
-    //Custom Fonts
-    private final String PATH_TO_OPENSANS_REGULAR_FONT = "fonts/OpenSans-Regular.ttf";
-
-    //Typefaces
-    private Typeface opensansRegular;
 
     //Font Spacing
     private float messageFontSpacing;
@@ -94,8 +86,7 @@ public class SnackView extends View
      */
     private void init(Context context)
     {
-        opensansRegular = Typeface.createFromAsset(context.getAssets(),
-                PATH_TO_OPENSANS_REGULAR_FONT);
+        setTypefaces(context);
         setPaintProperties();
     }
 

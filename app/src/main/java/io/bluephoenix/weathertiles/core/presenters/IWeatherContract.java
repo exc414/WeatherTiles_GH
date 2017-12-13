@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.bluephoenix.weathertiles.core.common.DialogDef.DialogType;
 import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
-import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScaleType;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.bluephoenix.weathertiles.core.data.model.db.Tile;
 
 /**
@@ -93,14 +93,15 @@ public interface IWeatherContract
          * Set the temp scale based on the int value.
          * @param tempScale the type of scale that will be saved.
          */
-        void setDefaultTempScale(@TempScaleType int tempScale);
+        void setDefaultTempScale(@TempScale int tempScale);
 
         /**
          * Get the temp scale based on the previously set value.
          * @return whether the temp scale should be set to celsius (0/default) or
          *         fahrenheit (1).
          */
-        @TempScaleType int getDefaultTempScale();
+        @TempScale
+        int getDefaultTempScale();
 
         /**
          * Set to true when the application runs for the first time.

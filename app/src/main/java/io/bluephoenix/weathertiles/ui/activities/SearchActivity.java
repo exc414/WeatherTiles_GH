@@ -38,10 +38,8 @@ import io.bluephoenix.weathertiles.util.Constant;
 public class SearchActivity extends BaseActivity implements
         ISearchContract.IPublishToView
 {
-    @BindView(R.id.btnBack)
-    ImageButton btnBack;
-    @BindView(R.id.searchCity)
-    CityAutoCompleteView cityAutoCompleteView;
+    @BindView(R.id.btnBack) ImageButton btnBack;
+    @BindView(R.id.searchCity) CityAutoCompleteView cityAutoCompleteView;
     private SearchPresenter presenter;
     private AutoCompleteAdapter autoCompleteAdapter;
     private Cities defaultSuggestions;
@@ -93,11 +91,8 @@ public class SearchActivity extends BaseActivity implements
     private void attachPresenter()
     {
         presenter = (SearchPresenter) getLastCustomNonConfigurationInstance();
-        if(presenter == null)
-        {
-            presenter = new SearchPresenter();
-        }
-        presenter.attachView(this);
+        if(presenter == null) { presenter = new SearchPresenter(); }
+        presenter.attachView(this, Constant.REGISTER_BUS);
     }
 
     @Override
@@ -153,7 +148,7 @@ public class SearchActivity extends BaseActivity implements
     @Override
     protected void onDestroy()
     {
-        presenter.detachView();
+        presenter.detachView(Constant.DEREGISTER_BUS);
         super.onDestroy();
     }
 
@@ -187,6 +182,7 @@ public class SearchActivity extends BaseActivity implements
             try
             {
                 long cityId = autoCompleteAdapter.getItem(position).getCityId();
+
                 //Set the text field because if not then the getCityId object gets toString()
                 //and put on as the text. While this is only for 1 second since then the
                 //activity is dismissed, it should not happen.

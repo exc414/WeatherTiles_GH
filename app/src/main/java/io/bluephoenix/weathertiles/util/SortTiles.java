@@ -52,21 +52,21 @@ public class SortTiles
     private static void sortAscending(List<Tile> tiles)
     {
         Collections.sort(tiles, (tile, tileToCompare) ->
-                tile.getTempCelsius() - tileToCompare.getTempCelsius());
+                tile.getTemp() - tileToCompare.getTemp());
     }
 
     private static void sortDescending(List<Tile> tiles)
     {
         Collections.sort(tiles, (tile, tileToCompare) ->
-                tileToCompare.getTempCelsius() - tile.getTempCelsius());
+                tileToCompare.getTemp() - tile.getTemp());
     }
 
     private static void sortDaytime(List<Tile> tiles)
     {
         Collections.sort(tiles, (tile, tileToCompare) ->
         {
-            int daytime = tile.getDayTime() ? 1 : 0;
-            int nighttime = tileToCompare.getDayTime() ? 1 : 0;
+            int daytime = tile.getIsDayTime() ? 1 : 0;
+            int nighttime = tileToCompare.getIsDayTime() ? 1 : 0;
             return daytime > nighttime ? -1 : daytime < nighttime ? 1 : 0;
         });
     }
@@ -75,8 +75,8 @@ public class SortTiles
     {
         Collections.sort(tiles, (tile, tileToCompare) ->
         {
-            int daytime = tile.getDayTime() ? 1 : 0;
-            int nighttime = tileToCompare.getDayTime() ? 1 : 0;
+            int daytime = tile.getIsDayTime() ? 1 : 0;
+            int nighttime = tileToCompare.getIsDayTime() ? 1 : 0;
             return daytime < nighttime ? -1 : daytime > nighttime ? 1 : 0;
         });
     }
@@ -84,12 +84,12 @@ public class SortTiles
     private static void sortAlphabeticallyAscending(List<Tile> tiles)
     {
         Collections.sort(tiles, (tile, tileToCompare) ->
-                tile.getCity().compareToIgnoreCase(tileToCompare.getCity()));
+                tile.getCityName().compareToIgnoreCase(tileToCompare.getCityName()));
     }
 
     private static void sortAlphabeticallyDescending(List<Tile> tiles)
     {
         Collections.sort(tiles, (tile, tileToCompare) ->
-                tileToCompare.getCity().compareToIgnoreCase(tile.getCity()));
+                tileToCompare.getCityName().compareToIgnoreCase(tile.getCityName()));
     }
 }

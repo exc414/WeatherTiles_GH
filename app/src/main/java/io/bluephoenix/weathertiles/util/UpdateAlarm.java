@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import io.bluephoenix.weathertiles.app.App;
 
@@ -25,6 +26,7 @@ public class UpdateAlarm
         //1st - Real Time; 2nd - Time for alarm to execute; 3rd - repeating interval
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 alarmTime, AlarmManager.INTERVAL_HOUR * 24, pendingIntent);
+        Log.i(Constant.TAG, "Alarm has been set : " + alarmTime);
     }
 
     public static void deleteAlarm(int pendingIntentId)

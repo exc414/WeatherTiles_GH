@@ -37,7 +37,7 @@ public class RefreshData
             {
                 cityId = tileList.get(i).getCityId();
                 apiResponse = new GetWeatherInfo<>(
-                        RetrofitCall.fiveDayWeather(cityId)).get(); //blocking we want.
+                        RetrofitCall.fiveDayWeather(cityId)).get(); //blocking good.
 
                 //No internet. Set needs update on share preferences.
                 //On next application start up try downloading the tile details data again.
@@ -48,9 +48,9 @@ public class RefreshData
                 }
                 else
                 {
-                    weatherRepository.deleteSingleDetailTile(tileList.get(i));
-                    weatherRepository.createDetailTiles(
-                            ForecastParser.parseResponse(apiResponse.getResponse()));
+                    weatherRepository.deleteTileDetail(tileList.get(i));
+                    weatherRepository.createTileDetails(ForecastParser.parseResponse(
+                            apiResponse.getResponse(), cityId));
                 }
             }
         }

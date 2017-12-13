@@ -3,9 +3,10 @@ package io.bluephoenix.weathertiles.core.data.repository;
 import java.util.List;
 
 import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
-import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScaleType;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.bluephoenix.weathertiles.core.data.model.db.Tile;
 import io.bluephoenix.weathertiles.core.data.model.db.TileDetail;
+import io.bluephoenix.weathertiles.core.data.model.db.WeatherDetail;
 
 /**
  * @author Carlos A. Perez Zubizarreta
@@ -14,8 +15,9 @@ public interface IRepository
 {
     interface Preferences
     {
-        void setDefaultTempScale(@TempScaleType int tempScale);
-        @TempScaleType int getDefaultTempScale();
+        void setDefaultTempScale(@TempScale int tempScale);
+        @TempScale
+        int getDefaultTempScale();
 
         void setDefaultSort(@SortType int sortType);
         @SortType int getDefaultSort();
@@ -56,7 +58,7 @@ public interface IRepository
         /**
          * @param tileDetailList a list of objects with detailed forecast information.
          */
-        void createDetailTiles(final List<TileDetail> tileDetailList);
+        void createTileDetails(final List<TileDetail> tileDetailList);
 
         /**
          * Update the tiles from the tiles details table in three hours intervals.
@@ -81,7 +83,16 @@ public interface IRepository
          * Delete a single detail tile.
          * @param tile an object with weather information.
          */
-        void deleteSingleDetailTile(final Tile tile);
+        void deleteTileDetail(final Tile tile);
+
+        /**
+         * Gets the data to populate the Weather Details View.
+         * @param position an int which detonates which row the data is fetched from.
+         * @return one WeatherDetail object.
+         */
+        WeatherDetail getWeatherDetail(int position, @TempScale int tempScale);
+
+        void saveSelectedTabPosition(int position, long cityId);
 
         /**
          * Change the saved position of the tile object.

@@ -11,16 +11,16 @@ public abstract class BasePresenter<V>
 {
     V publishToView;
 
-    public final void attachView(@NonNull V view)
+    public final void attachView(@NonNull V view, boolean register)
     {
         this.publishToView = view;
-        EventBus.getDefault().register(this);
+        if(register) { EventBus.getDefault().register(this); }
     }
 
-    public final void detachView()
+    public final void detachView(boolean deregister)
     {
         this.publishToView = null;
-        EventBus.getDefault().unregister(this);
+        if(deregister) { EventBus.getDefault().unregister(this); }
     }
 
     protected final boolean isViewAttached()

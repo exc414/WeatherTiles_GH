@@ -3,11 +3,12 @@ package io.bluephoenix.weathertiles.app;
 import android.app.Application;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.evernote.android.job.JobManager;
 import com.facebook.stetho.Stetho;
-import com.squareup.leakcanary.LeakCanary;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import io.bluephoenix.weathertiles.R;
+import io.bluephoenix.weathertiles.core.jobs.SyncJobCreator;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -24,14 +25,13 @@ public class App extends Application
     @Override
     public void onCreate()
     {
-        //TODO ask for permission so this is more accurate.
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
         super.onCreate();
         instance = this;
 
-        if(LeakCanary.isInAnalyzerProcess(this)) { return; }
-        LeakCanary.install(this);
+        //if(LeakCanary.isInAnalyzerProcess(this)) { return; }
+        //LeakCanary.install(this);
 
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
@@ -57,5 +57,8 @@ public class App extends Application
                 .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
+
+        //Create job scheduler
+        JobManager.create(this).addJobCreator(new SyncJobCreator());
     }
 }

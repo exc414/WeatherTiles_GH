@@ -4,7 +4,11 @@ import java.util.HashMap;
 
 import io.bluephoenix.weathertiles.core.common.SortDef;
 import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -13,30 +17,30 @@ import io.realm.annotations.Required;
  */
 public class Tile extends RealmObject
 {
+    @Index
     @PrimaryKey
     private long cityId;
 
-    @Required
-    private String weatherId;
-
+    private int weatherId;
     private int tempCelsius;
-    private double lat;
-    private double lon;
     private int savedPosition = 0;
-    private double sunrise;
-    private double sunset;
+    private int selectedPosition = 0;
+    private double wind;
+    private int humidity;
+    //Use for sorting the tiles daytime/nighttime
+    private boolean isDayTime;
+
+    @Ignore
+    private double lat;
+
+    @Ignore
+    private double lon;
 
     @Required
     private String description;
 
     @Required
-    private String timeZone;
-
-    //Using Boolean object instead of primitive for the null value.
-    private Boolean isDayTime;
-
-    @Required
-    private String city;
+    private String cityName;
 
     @Required
     private String countryIso;
@@ -51,35 +55,32 @@ public class Tile extends RealmObject
         this.cityId = cityId;
     }
 
-    public String getWeatherId()
+    public int getWeatherId()
     {
         return weatherId;
     }
 
-    public void setWeatherId(String weatherId)
+    public void setWeatherId(int weatherId)
     {
         this.weatherId = weatherId;
     }
 
-    public int getTempCelsius()
-    {
-        return tempCelsius;
-    }
-
-    public void setTempCelsius(int tempCelsius)
-    {
-        this.tempCelsius = tempCelsius;
-    }
+    public int getTemp() { return tempCelsius; }
 
     /**
      * The db has only celsius temp. Convert on the fly when fahrenheit is required.
      * @return an integer with the temperature in fahrenheit.
      */
-    public int getTempFahrenheit() { return (int) Math.round((tempCelsius * 1.8) + 32); }
+    public int getTempWithScale(@TempScale int tempScale)
+    {
+        return (tempScale == TempScaleDef.FAHRENHEIT) ?
+                (int) Math.round((tempCelsius * 1.8) + 32) : tempCelsius;
+    }
 
-    public void setDayTime(boolean isDayTime) { this.isDayTime = isDayTime; }
-
-    public boolean getDayTime() { return isDayTime; }
+    public void setTemp(int tempCelsius)
+    {
+        this.tempCelsius = tempCelsius;
+    }
 
     public String getDescription()
     {
@@ -91,24 +92,14 @@ public class Tile extends RealmObject
         this.description = description;
     }
 
-    public String getTimeZone()
+    public String getCityName()
     {
-        return timeZone;
+        return cityName;
     }
 
-    public void setTimeZone(String timeZone)
+    public void setCityName(String cityName)
     {
-        this.timeZone = timeZone;
-    }
-
-    public String getCity()
-    {
-        return city;
-    }
-
-    public void setCity(String city)
-    {
-        this.city = city;
+        this.cityName = cityName;
     }
 
     public String getCountryIso()
@@ -119,6 +110,46 @@ public class Tile extends RealmObject
     public void setCountryIso(String countryIso)
     {
         this.countryIso = countryIso;
+    }
+
+    public int getSavedPosition()
+    {
+        return savedPosition;
+    }
+
+    public void setSavedPosition(int savedPosition)
+    {
+        this.savedPosition = savedPosition;
+    }
+
+    public int getSelectedPosition()
+    {
+        return selectedPosition;
+    }
+
+    public void setSelectedPosition(int selectedPosition)
+    {
+        this.selectedPosition = selectedPosition;
+    }
+
+    public double getWind()
+    {
+        return wind;
+    }
+
+    public void setWind(double wind)
+    {
+        this.wind = wind;
+    }
+
+    public int getHumidity()
+    {
+        return humidity;
+    }
+
+    public void setHumidity(int humidity)
+    {
+        this.humidity = humidity;
     }
 
     public double getLat()
@@ -141,23 +172,16 @@ public class Tile extends RealmObject
         this.lon = lon;
     }
 
-    public int getSavedPosition()
+    public boolean getIsDayTime()
     {
-        return savedPosition;
+        return isDayTime;
     }
 
-    public void setSavedPosition(int savedPosition)
+    public void setIsDayTime(boolean isDayTime)
     {
-        this.savedPosition = savedPosition;
+        this.isDayTime = isDayTime;
     }
 
-    public double getSunrise() { return sunrise; }
-
-    public void setSunrise(double sunrise) { this.sunrise = sunrise; }
-
-    public double getSunset() { return sunset; }
-
-    public void setSunset(double sunset) { this.sunset = sunset; }
 
     /**
      * Indicates whether some other object is "equal to" this one.
@@ -208,9 +232,9 @@ public class Tile extends RealmObject
         switch(sortType)
         {
             case SortDef.TEMP_ASCENDING:
-            case SortDef.TEMP_DESCENDING: return getTempCelsius();
+            case SortDef.TEMP_DESCENDING: return getTemp();
             case SortDef.DAYTIME:
-            case SortDef.NIGHTTIME: return (getDayTime()) ? 1 : 0;
+            case SortDef.NIGHTTIME: return (getIsDayTime()) ? 1 : 0;
             default: return -1;
         }
     }

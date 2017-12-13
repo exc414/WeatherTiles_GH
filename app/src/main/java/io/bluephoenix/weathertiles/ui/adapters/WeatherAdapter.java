@@ -4,13 +4,13 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +19,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.bluephoenix.weathertiles.R;
 import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
-import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScaleType;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.bluephoenix.weathertiles.core.data.model.db.Tile;
+import io.bluephoenix.weathertiles.ui.activities.WeatherDetailsActivity;
 import io.bluephoenix.weathertiles.ui.views.WeatherView;
-import io.bluephoenix.weathertiles.ui.views.reyclerview.GLMWithSmoothScroller;
+import io.bluephoenix.weathertiles.ui.views.reyclerview.GLMWeather;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.WeatherRecyclerView;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.gestures.IDragDropSwipeHelper;
 import io.bluephoenix.weathertiles.util.AnimListener;
+import io.bluephoenix.weathertiles.util.Constant;
 import io.bluephoenix.weathertiles.util.PlaceTiles;
 import io.bluephoenix.weathertiles.util.SortTiles;
 import io.bluephoenix.weathertiles.util.Util;
 
-import static io.bluephoenix.weathertiles.core.common.TempScaleDef.CELSIUS;
-import static io.bluephoenix.weathertiles.core.common.TempScaleDef.FAHRENHEIT;
 import static io.bluephoenix.weathertiles.util.Constant.ENABLE_AUTO_SCROLL;
 import static io.bluephoenix.weathertiles.util.Constant.ENABLE_BLINK_ANIMATION;
 
@@ -45,22 +46,26 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
 
     private List<Tile> tileList = new ArrayList<>();
     private IOnTileActionPublish onTileAction;
-
-    private int tempScaleType = CELSIUS;
+    private int tempScale = TempScaleDef.CELSIUS;
     private int lastAddedTilePosition = RESET_VALUE;
     private int tilePosition;
     private int checkInterval = 700; //milliseconds
     private boolean isUserMovingTile = false;
+    private Activity activity;
 
-    public WeatherAdapter(Activity activity) { ButterKnife.bind(this, activity); }
+    public WeatherAdapter(Activity activity)
+    {
+        ButterKnife.bind(this, activity);
+        this.activity = activity;
+    }
 
     @Override
     public WeatherAdapter.TileHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.weather_tile, parent, false);
+                .inflate(R.layout.weather_tile, parent, Constant.SHOULD_ATTACH_NOW);
 
-        return new TileHolder(view);
+        return new TileHolder(view, setTileHolderClick());
     }
 
     public void registerOnTilePublishCallback(IOnTileActionPublish onTileAction)
@@ -73,13 +78,9 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
     {
         holder.tileView.setCityId(tileList.get(position).getCityId());
         holder.tileView.setWeatherIconContent(tileList.get(position).getWeatherId(),
-                tileList.get(position).getDayTime());
-
-        holder.tileView.setTempContent(
-                (tempScaleType == FAHRENHEIT) ? tileList.get(position).getTempFahrenheit()
-                        : tileList.get(position).getTempCelsius());
-
-        holder.tileView.setCityContent(tileList.get(position).getCity());
+                tileList.get(position).getIsDayTime());
+        holder.tileView.setTempContent(tileList.get(position).getTempWithScale(tempScale));
+        holder.tileView.setCityContent(tileList.get(position).getCityName());
         holder.tileView.setCountryContent(tileList.get(position).getCountryIso());
 
         //Animate an added tile to let the user find it easier.
@@ -202,18 +203,19 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
      */
     public void addTile(Tile tile, @SortType int sortType, int gridColumns,
                         final WeatherRecyclerView weatherRecyclerView,
-                        final GLMWithSmoothScroller glmWithSmoothScroller, int flags)
+                        final GLMWeather glmWeather, int flags)
     {
         tilePosition = PlaceTiles.place(sortType, tile, tileList);
-        boolean isTileVisible = isTileVisible(glmWithSmoothScroller, tilePosition, gridColumns);
+        boolean isTileVisible = isTileVisible(glmWeather, tilePosition, gridColumns);
         boolean autoScroll = false;
 
         if((flags & ENABLE_AUTO_SCROLL) == ENABLE_AUTO_SCROLL) { autoScroll = true; }
 
-        //If the tile is visible show the animation. If the tile is not visible and autoScroll
-        //is off do not show the animation and call the onTileAddComplete immediately as if
-        //we do not do this it will never get called because we are not showing the animation.
-        // If the tile is not visible but autoScroll is on, then show the animation.
+        //If the tile is visible show the animation. If the tile is not visible and
+        //autoScroll is off do not show the animation and call the onTileAddComplete
+        //immediately as if we do not do this it will never get called because we are
+        //not showing the animation. If the tile is not visible but autoScroll is on,
+        //then show the animation.
         if((flags & ENABLE_BLINK_ANIMATION) == ENABLE_BLINK_ANIMATION)
         { lastAddedTilePosition = (isTileVisible) ? tilePosition :
                 (!autoScroll) ? RESET_VALUE : tilePosition; }
@@ -243,19 +245,19 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
      * Calculates whether the tile that will be added will be visible on the screen
      * without the need for scrolling.
      *
-     * @param glmWithSmoothScroller A grid layout manager extended with smooth scrolling.
+     * @param glmWeather A grid layout manager extended with smooth scrolling.
      * @param tilePosition          An int detonating the position of the tile on the grid.
      * @param gridColumns           An int detonating hte amount of columns that the grid has.
      * @return boolean value whether the tile is visible or not.
      */
-    private boolean isTileVisible(final GLMWithSmoothScroller glmWithSmoothScroller,
+    private boolean isTileVisible(final GLMWeather glmWeather,
                                   int tilePosition, int gridColumns)
     {
         //Use the layout manager over the recyclerView to get the height of the tile
         //as the getChildAt method will sometimes return null.
-        int firstItem = glmWithSmoothScroller.findFirstCompletelyVisibleItemPosition();
+        int firstItem = glmWeather.findFirstCompletelyVisibleItemPosition();
         int tileHeight = (firstItem >= 0) ?
-                glmWithSmoothScroller.findViewByPosition(firstItem).getHeight() : 1;
+                glmWeather.findViewByPosition(firstItem).getHeight() : 1;
 
         //Get the max # of tiles that are possible on the screen to check against
         //the tile position. Meaning if the tile position is bigger then we must scroll
@@ -322,11 +324,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
      * @param tempScaleType boolean value denoting whether the value is Celsius
      *                      or Fahrenheit.
      */
-    public void updateDegreeType(@TempScaleType int tempScaleType)
+    public void updateDegreeType(@TempScale int tempScaleType)
     {
-        this.tempScaleType = tempScaleType;
+        this.tempScale = tempScaleType;
         //notifyItemRangeChanged(0, tileList.size()); animates the change
-        //and it looks worse in my opinion that no animation.
+        //and it looks worse in my opinion than no animation.
         notifyDataSetChanged();
     }
 
@@ -343,15 +345,34 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
         return citiesId;
     }
 
-    static class TileHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
-            IDragDropSwipeHelper.ViewHolder
+    /**
+     * Gets the correct tile object base on the position of the click
+     * and starts the weather details activity with the correct information.
+     * @return an onClick listener for the TileDetailsHolder.
+     */
+    private TileHolder.IOnTileHolderClick setTileHolderClick()
+    {
+        return (position, view) ->
+        {
+            Intent intent = new Intent(activity, WeatherDetailsActivity.class);
+            intent.putExtra("position", position);
+            intent.putExtra("totalTiles", tileList.size());
+            intent.putExtra("tempScale", tempScale);
+            activity.startActivity(intent);
+        };
+    }
+
+    static class TileHolder extends RecyclerView.ViewHolder implements
+            IDragDropSwipeHelper.ViewHolder, View.OnClickListener
     {
         @BindView(R.id.tileView) WeatherView tileView;
+        private IOnTileHolderClick onTileHolderClick;
 
-        TileHolder(View itemView)
+        TileHolder(View itemView, IOnTileHolderClick onTileHolderClick)
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.onTileHolderClick = onTileHolderClick;
             //Setting clickable here allows for the ripple effect to show.
             //If done on the layout (xml) it consumes the click and cannot be used.
             itemView.setClickable(true);
@@ -361,7 +382,10 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
         void clearAnimation() { itemView.clearAnimation(); }
 
         @Override
-        public void onClick(View view) { }
+        public void onClick(View view)
+        {
+            onTileHolderClick.onItemClick(getAdapterPosition(), view);
+        }
 
         @Override
         public void onItemSelected()
@@ -381,5 +405,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.TileHold
             itemView.setSelected(false);
             itemView.setActivated(false);
         }
+
+        interface IOnTileHolderClick { void onItemClick(int position, View view); }
     }
 }

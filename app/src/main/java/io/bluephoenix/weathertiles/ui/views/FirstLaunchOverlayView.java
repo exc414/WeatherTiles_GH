@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +21,7 @@ import io.bluephoenix.weathertiles.util.Util;
 /**
  * @author Carlos A. Perez
  */
-public class FirstLaunchOverlayView extends View
+public class FirstLaunchOverlayView extends BaseView
 {
     //Root Layout where view will be added
     FrameLayout frameLayout;
@@ -89,7 +88,6 @@ public class FirstLaunchOverlayView extends View
     //Message setup
     private final int messageMaxWidth = (int) (width * 0.80F); //80 percent of total width
 
-    //private final float startDrawingMessageX = width * 0.10F;
     private float startDrawingMessageX;
     private float startDrawingMessageY = centerHeight;
     private float messageFontSpacing = 0;
@@ -115,12 +113,9 @@ public class FirstLaunchOverlayView extends View
      */
     private void init(Context context)
     {
+        setTypefaces(context);
         setWillNotDraw(false);
         setLayerType(LAYER_TYPE_HARDWARE, null);
-
-        String PATH_TO_MONTSERRAT_REGULAR_FONT = "fonts/OpenSans-Regular.ttf";
-        Typeface openSans = Typeface.createFromAsset(context.getAssets(),
-                PATH_TO_MONTSERRAT_REGULAR_FONT);
 
         circleClearPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circleClearPaint.setColor(Color.TRANSPARENT);
@@ -134,7 +129,7 @@ public class FirstLaunchOverlayView extends View
         messagePaint.setColor(colorText);
         messagePaint.setTextSize(messageTextSize);
         messagePaint.setTextAlign(Paint.Align.LEFT);
-        messagePaint.setTypeface(openSans);
+        messagePaint.setTypeface(opensansRegular);
         //This needs to come after setting the color and not before it.
         messagePaint.setAlpha(0);
         messageFontSpacing = messagePaint.getFontSpacing();
@@ -143,7 +138,7 @@ public class FirstLaunchOverlayView extends View
         buttonTextPaint.setColor(colorButton);
         buttonTextPaint.setTextSize(buttonTextSize);
         buttonTextPaint.setTextAlign(Paint.Align.CENTER);
-        buttonTextPaint.setTypeface(openSans);
+        buttonTextPaint.setTypeface(opensansRegular);
         buttonTextPaint.setAlpha(0);
     }
 
@@ -432,18 +427,19 @@ public class FirstLaunchOverlayView extends View
             {
                 while(!bool)
                 {
-                    //If the value set by charsToSubStr is a space we can break
-                    //there, however if its a letter than we cannot. We cannot
-                    //go forward adding characters as this would mean our string
-                    //will be larger than our max width instead we must remove a
-                    //char from charsToSubStr until we find a space.
-                    //Example - charsToSubStr = 39, but space is found at 34. Keep
-                    //removing until 34. Set as value for the second messageChunks array,
-                    //reset counter and bool. Next multiply 39 (charsToSubStr starting
-                    //value) but this time i is 2 so we correctly moved along the
-                    //string or else we would always get the same string into our array.
-                    //Then once again count backwards until a space is found and break again.
-                    //Rinse and repeat.
+                    /*
+                     * If the value set by charsToSubStr is a space we can break
+                     * there, however if its a letter than we cannot. We cannot
+                     * go forward adding characters as this would mean our string
+                     * will be larger than our max width instead we must remove a
+                     * char from charsToSubStr until we find a space.
+                     * Example - charsToSubStr = 39, but space is found at 34. Keep
+                     * removing until 34. Set as value for the second messageChunks array,
+                     * reset counter and bool. Next multiply 39 (charsToSubStr starting
+                     * value) but this time i is 2 so we correctly moved along the
+                     * string or else we would always get the same string into our array.
+                     * Then once again count backwards until a space is found and break again.
+                     */
                     if(message.charAt((charsToSubStr * i) - counter) == ' ')
                     {
                         messageChunks[i] = (charsToSubStr * i) - counter;
@@ -466,17 +462,18 @@ public class FirstLaunchOverlayView extends View
                         messageChunks[i], messageChunks[i + 1]).trim();
             }
 
-            messagePaint.getTextBounds(messageContent[0], 0, messageContent[0].length(), messageBound);
+            messagePaint.getTextBounds(messageContent[0], 0, messageContent[0].length(),
+                    messageBound);
             //Make sure the text is centered but aligned to the left when multiple lines are used.
             startDrawingMessageX = centerWidth - (messageBound.width() / 2);
         }
         else
         {
-            //Array init is need it here instead of when the array is declared because if a multi
-            //line messageContent is written and afterwards a single line is written. Then the
-            //2nd 3rd ... n lines in the previous content will stay drawn and only the first
-            // line will change. Therefore, we must always remake the array when a single line is
-            //about to be drawn. Multi line already does this.
+            //Array init is need it here instead of when the array is declared because
+            //if a multi line messageContent is written and afterwards a single line
+            //is written. Then the 2nd 3rd ... n lines in the previous content will stay
+            //drawn and only the first line will change. Therefore, we must always remake
+            //the array when a single line is about to be drawn. Multi line already does this.
             messageContent = new String[1];
             messageContent[0] = message;
         }
@@ -527,7 +524,7 @@ public class FirstLaunchOverlayView extends View
      * actions properly. Logic handling the click actions should ideally be placed in
      * View#performClick as some accessibility services invoke performClick when
      * a click action should occur.
-     * @return a boolean detonating whether a click was perform.
+     * @return a boolean detonating whether a click was performed.
      */
     @Override
     public boolean performClick()

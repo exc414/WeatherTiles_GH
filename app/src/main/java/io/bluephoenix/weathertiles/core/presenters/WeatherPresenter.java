@@ -1,8 +1,8 @@
 package io.bluephoenix.weathertiles.core.presenters;
 
-import android.app.AlarmManager;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -16,7 +16,7 @@ import io.bluephoenix.weathertiles.app.App;
 import io.bluephoenix.weathertiles.core.common.DialogDef;
 import io.bluephoenix.weathertiles.core.common.EventDef;
 import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
-import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScaleType;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.bluephoenix.weathertiles.core.data.model.bus.Events;
 import io.bluephoenix.weathertiles.core.data.model.db.Tile;
 import io.bluephoenix.weathertiles.core.data.remote.GetWeatherInfo;
@@ -24,13 +24,12 @@ import io.bluephoenix.weathertiles.core.data.remote.RetrofitCall;
 import io.bluephoenix.weathertiles.core.data.repository.IRepository;
 import io.bluephoenix.weathertiles.core.data.repository.PreferencesRepository;
 import io.bluephoenix.weathertiles.core.data.repository.WeatherRepository;
+import io.bluephoenix.weathertiles.core.jobs.DailySyncJob;
 import io.bluephoenix.weathertiles.util.Constant;
 import io.bluephoenix.weathertiles.util.ForecastParser;
 import io.bluephoenix.weathertiles.util.RefreshData;
-import io.bluephoenix.weathertiles.util.UpdateAlarm;
 import io.bluephoenix.weathertiles.util.Util;
 import java8.util.concurrent.CompletableFuture;
-import java8.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Carlos A. Perez Zubizarreta
@@ -38,14 +37,12 @@ import java8.util.concurrent.ThreadLocalRandom;
 public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToView>
         implements IWeatherContract.IPresenter
 {
-    private final String TIME_ZONE_ID = "UTC";
 
     private final boolean onStartUpCall = true;
     private final boolean onRepeatCall = false;
 
     private final long updateInterval = TimeUnit.HOURS.toSeconds(3);
     private final long updateSunriseSunsetInterval = TimeUnit.MINUTES.toMillis(5);
-    private final int jitter = 15000;
 
     private final Handler updateWeather = new Handler();
     private final Handler updateSunriseSunset = new Handler();
@@ -60,6 +57,7 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
     {
         weatherRepository = new WeatherRepository();
         preferences = new PreferencesRepository(sharedPreferences);
+        new DailySyncJob();
     }
 
     /**
@@ -92,20 +90,21 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
                     }
                     else
                     {
-                        //If it did not failed, it has finish therefore dismiss the dialog.
+                        //If it did not failed, it has finished therefore dismiss the dialog.
                         initTiles.post(() ->
                                 publishToView.notifyUserAlert(DialogDef.DOWNLOADING_FINISHED));
                     }
                 }
 
-                weatherRepository.updateTiles(updateTimestamp(), onStartUpCall);
+                long updateTimestampVar = updateTimestamp();
+                Log.i(Constant.TAG, "Update timestamp is : " + updateTimestampVar);
+                weatherRepository.updateTiles(updateTimestampVar, onStartUpCall);
                 List<Tile> tiles = weatherRepository.getAllTiles();
 
                 initTiles.post(() ->
                 {
                     publishToView.initTiles(tiles);
                     pollForCurrentWeatherUpdate();
-                    pollForFiveDayForecast();
                     pollForSunriseSunsetUpdate();
                 });
             });
@@ -135,9 +134,9 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
                         apiResponseCurrent.getResponse(), cityId));
 
                 CompletableFuture.supplyAsync(new GetWeatherInfo<>(
-                        RetrofitCall.fiveDayWeather(cityId))).thenAccept(apiResponseFiveDay ->
-                        weatherRepository.createDetailTiles(
-                            ForecastParser.parseResponse(apiResponseFiveDay.getResponse())));
+                    RetrofitCall.fiveDayWeather(cityId))).thenAccept(apiResponseFiveDay ->
+                    weatherRepository.createTileDetails(ForecastParser.parseResponse
+                            (apiResponseFiveDay.getResponse(), cityId)));
             }
         });
     }
@@ -171,32 +170,6 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
     public void deleteTile(Tile tile) { weatherRepository.deleteTile(tile); }
 
     /**
-     * Set an alarm that will run at the start of each day to retrieve new forecast
-     * data. We only used cache data for one day (or less) to limit API calls. However, the
-     * accuracy of data diminishes as time goes by. (Sane default one day.)
-     */
-    private void pollForFiveDayForecast()
-    {
-        if(!preferences.getHasAlarmBeenSet())
-        {
-            //Before setting the alarm delete any that might remain. Example
-            //user clears the data of the app and the preferences will be erased
-            //but that does not kill the alarm. (As far as I know).
-            UpdateAlarm.deleteAlarm(Constant.PENDING_INTENT_ID_1DAY);
-
-            //Gives random start time in millis between 120 seconds and 2.8 hours.
-            //This makes it harder for too many connections to flood the weather api server.
-            long alarmTime = (Util.getStartOfDayInMillis() + TimeUnit.HOURS.toMillis(24));
-            int randomTime = ThreadLocalRandom.current().nextInt(120000,
-                    (int) (AlarmManager.INTERVAL_HOUR * 2.8) + 1);
-
-            long finalAlarmTime = alarmTime + randomTime;
-            UpdateAlarm.createFiveDayForecastAlarm(finalAlarmTime);
-            preferences.setHasAlarmBeenSet(true);
-        }
-    }
-
-    /**
      * Check for an update on whether is daytime or nighttime.
      * The interval is 5 minutes which is half of the margin of error of the sunrise/sunset
      * calculation. (Sane default)
@@ -211,7 +184,7 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
                 weatherRepository.updateTilesSunriseSunset();
                 updateSunriseSunset.postDelayed(this, updateSunriseSunsetInterval);
             }
-        }, updateSunriseSunsetInterval);
+        }, 2000);
     }
 
     /**
@@ -222,11 +195,12 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
     {
         long updateTimestamp = updateTimestamp();
         long startTime = (updateTimestamp + updateInterval) -
-                Util.getTimeNowInSeconds(Calendar.getInstance(), TIME_ZONE_ID);
+                Util.getTimeNowInSeconds(Calendar.getInstance(), "UTC");
 
         //Set future update while the application is running. Even though the
         //start time will be (most likely) far beyond the time the application is
         //used for, this covers edge cases if a user leaves the app open for 3+ hours.
+        int jitter = 15000;
         updateWeather.postDelayed(new Runnable()
         {
             @Override
@@ -245,7 +219,7 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
      */
     private long updateTimestamp()
     {
-        double nowInDecimals = Util.getTimeNowInDecimals(Calendar.getInstance(), TIME_ZONE_ID);
+        double nowInDecimals = Util.getTimeNowInDecimals(Calendar.getInstance(), "UTC");
 
         //There are 8 updates over 24 hours. Interval of 3 hours.
         //00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
@@ -310,7 +284,7 @@ public class WeatherPresenter extends BasePresenter<IWeatherContract.IPublishToV
     }
 
     @Override
-    public void setDefaultTempScale(@TempScaleType int tempScale)
+    public void setDefaultTempScale(@TempScale int tempScale)
     { preferences.setDefaultTempScale(tempScale); }
 
     @Override

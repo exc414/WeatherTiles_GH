@@ -12,8 +12,8 @@ public class RetrofitCall
 {
     public static Call<ApiResponseCurrent> currentWeather(long cityId)
     {
-        return RetrofitClient.getCurrentWeatherClient(Constant.BASE_WEATHERBIT_API_URL)
-                .create(IWeatherService.class).getCurrentWeatherByID(String.valueOf(cityId));
+        return RetrofitClient.getCurrentWeatherClient(Constant.BASE_OWM_API_URL)
+                .create(IWeatherService.class).getCurrentWeatherByID(cityId);
     }
 
     public static Call<ApiResponseFiveDay> fiveDayWeather(long cityId)

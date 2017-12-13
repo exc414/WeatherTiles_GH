@@ -17,9 +17,10 @@ public class Constant
     //Intent to give the alarm in case we need to delete it or set it again.
     public static final int PENDING_INTENT_ID_1DAY = 11423;
 
-    //Unicode for Fahrenheit and Celsius
-    private static final String fSymbol = "\u2109";
-    private static final String cSymbol = "\u2103";
+    //Unicode for Fahrenheit, Celsius and the degree symbol.
+    public static final String degreeSymbol = "\u00B0";
+    public static final String fSymbol = "\u2109";
+    public static final String cSymbol = "\u2103";
 
     //Base URL to make API calls with retrofit.
     //Why no HTTPS? This is weather data and its not sensitive. On API 17 (emulator) a
@@ -28,7 +29,6 @@ public class Constant
     //      Trust anchor for certification path not found.
     //was thrown. This might be an emulator issue but I rather not risk HTTPS when there is
     //no sensitive data transferred.
-    public static final String BASE_WEATHERBIT_API_URL = "http://api.weatherbit.io/v2.0/";
     public static final String BASE_OWM_API_URL = "http://api.openweathermap.org/data/2.5/";
 
     //Scroll speed for the weatherRecyclerView
@@ -38,7 +38,6 @@ public class Constant
     //Package name of applications
     public static final String QUOTE_MACHINE = "xyz.bluephoenix.quotemachine";
     public static final String APP_UNINSTALLER = "xyz.bluephoenix.appuninstaller";
-    public static final String CLEAR_HANDSET = "io.bluephoenix.clearhandset";
     public static final String STRESS_CPU = "xyz.bluephoenix.stresscpu";
 
     public static final int DEFAULT_MAX_TILES = 40;
@@ -46,4 +45,14 @@ public class Constant
     //Flags for new tile behaviour in the weatherRecyclerView
     public static final int ENABLE_BLINK_ANIMATION = 1;
     public static final int ENABLE_AUTO_SCROLL = 2;
+
+    //Whether the inflated view in the onCreateViewHolder
+    //should immediately attach to their parent.
+    public static final boolean SHOULD_ATTACH_NOW = false;
+
+    public static final int DONT_REMOVE = -1;
+    public static final boolean REGISTER_BUS = true;
+    public static final boolean DONT_REGISTER_BUS = false;
+    public static final boolean DEREGISTER_BUS = true;
+    public static final boolean DONT_DEREGISTER_BUS = false;
 }

@@ -19,10 +19,8 @@ public class AboutActivity extends BaseActivity
 {
     @BindView(R.id.btnWeatherIcons) Button btnWeatherIcons;
     @BindView(R.id.btnOWM) Button btnOpenWeatherMapAPI;
-    @BindView(R.id.btnWB) Button btnWeatherbitAPI;
     @BindView(R.id.imgBtnQuoteMachine) ImageButton btnQuoteMachine;
     @BindView(R.id.imgBtnAppUninstaller) ImageButton btnAppUninstaller;
-    @BindView(R.id.imgBtnClearHandset) ImageButton btnClearhandset;
     @BindView(R.id.imgBtnStressCPU) ImageButton btnStressCPU;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -46,12 +44,6 @@ public class AboutActivity extends BaseActivity
         Util.openWebsiteInBrowser(this, "https://openweathermap.org/api/");
     }
 
-    @OnClick(R.id.btnWB)
-    public void visitWeatherbitWebsite()
-    {
-        Util.openWebsiteInBrowser(this, "https://www.weatherbit.io/features");
-    }
-
     @OnClick(R.id.imgBtnQuoteMachine)
     public void openGooglePlayListingQuoteMachine()
     {
@@ -62,12 +54,6 @@ public class AboutActivity extends BaseActivity
     public void openGooglePlayListingAppUninstaller()
     {
         Util.openAppInMarket(this, Constant.APP_UNINSTALLER);
-    }
-
-    @OnClick(R.id.imgBtnClearHandset)
-    public void openGooglePlayListingClearhandset()
-    {
-        Util.openAppInMarket(this, Constant.CLEAR_HANDSET);
     }
 
     @OnClick(R.id.imgBtnStressCPU)

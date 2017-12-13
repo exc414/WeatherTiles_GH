@@ -1,5 +1,7 @@
 package io.bluephoenix.weathertiles.core.data.model.db;
 
+import io.bluephoenix.weathertiles.core.common.TempScaleDef;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
@@ -15,16 +17,13 @@ public class TileDetail extends RealmObject
 
     @Index
     private long cityId;
-
-    @Required
-    private String weatherId;
-
-    private int temperature;
+    private int weatherId;
+    private int tempCelsius;
+    private double wind;
     private int humidity;
-    private float wind;
     private long timestamp;
-    private float rainFall3h;
     private boolean hasBeenUsed = false;
+    private double rainFall3h;
 
     @Required
     private String mainWeather;
@@ -52,24 +51,40 @@ public class TileDetail extends RealmObject
         this.cityId = cityId;
     }
 
-    public String getWeatherId()
+    public int getWeatherId()
     {
         return weatherId;
     }
 
-    public void setWeatherId(String weatherId)
+    public void setWeatherId(int weatherId)
     {
         this.weatherId = weatherId;
     }
 
     public int getTemperature()
     {
-        return temperature;
+        return tempCelsius;
     }
 
-    public void setTemperature(int temperature)
+    public int getTempWithScale(@TempScale int tempScale)
     {
-        this.temperature = temperature;
+        return (tempScale == TempScaleDef.FAHRENHEIT) ?
+                (int) Math.round((tempCelsius * 1.8) + 32) : tempCelsius;
+    }
+
+    public void setTemperature(int tempCelsius)
+    {
+        this.tempCelsius = tempCelsius;
+    }
+
+    public double getWind()
+    {
+        return wind;
+    }
+
+    public void setWind(double wind)
+    {
+        this.wind = wind;
     }
 
     public int getHumidity()
@@ -80,16 +95,6 @@ public class TileDetail extends RealmObject
     public void setHumidity(int humidity)
     {
         this.humidity = humidity;
-    }
-
-    public float getWind()
-    {
-        return wind;
-    }
-
-    public void setWind(float wind)
-    {
-        this.wind = wind;
     }
 
     public long getTimestamp()
@@ -112,12 +117,12 @@ public class TileDetail extends RealmObject
         this.description = description;
     }
 
-    public float getRainFall3h()
+    public double getRainFall3h()
     {
         return rainFall3h;
     }
 
-    public void setRainFall3h(float rainFall3h)
+    public void setRainFall3h(double rainFall3h)
     {
         this.rainFall3h = rainFall3h;
     }

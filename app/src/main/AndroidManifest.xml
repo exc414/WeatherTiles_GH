@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".app.App"
@@ -41,27 +40,9 @@
             android:name=".ui.activities.settings.SettingsActivity"
             android:screenOrientation="sensor" />
 
-        <receiver
-            android:name="io.bluephoenix.weathertiles.core.receivers.UpdateReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="io.bluephoenix.weathertiles.UPDATE_TILE_ALARM" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name="io.bluephoenix.weathertiles.core.receivers.BootReceiver"
-            android:exported="true">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <!--For HTC devices-->
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-            </intent-filter>
-        </receiver>
-
-        <service android:name="io.bluephoenix.weathertiles.core.services.UpdateService" />
+        <activity
+            android:name=".ui.activities.WeatherDetailsActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

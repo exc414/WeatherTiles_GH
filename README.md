@@ -1,7 +1,7 @@
 # Weather Tiles
 
 [![API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![1.0.0](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/exc414/WeatherTiles_GH)
+[![1.0.0](https://img.shields.io/badge/version-1.0.0-blue.svg)](http://git.bp.lan:3000/exc414/WeatherTiles)
 
 
 
@@ -33,15 +33,13 @@
 
 > *Requires Android Studio 3.0+*
 
-This application requires API keys from Open Weather Map and Weatherbit (both at the time of writing are free). Inside gradle.properties add the following code: 
+This application requires API keys from Open Weather Map. Inside gradle.properties add the following code: 
 
 ```
 OPEN_WEATHER_API_KEY="YOUR-API-KEY-HERE"
-WEATHER_BIT_API_KEY="YOUR-API-KEY-HERE"
 ```
 
 * [OpenWeatherMap](https://openweathermap.org/api) - Open Weather Map API Documentation
-* [Weatherbit](https://www.weatherbit.io/api) - Weather API Documentation
 
 <br>
 
@@ -51,8 +49,8 @@ WEATHER_BIT_API_KEY="YOUR-API-KEY-HERE"
 
 ### App Images
 
-![Tiles](https://github.com/exc414/WeatherTiles_GH/blob/master/app_img/tiles.png) ![Sort](https://github.com/exc414/WeatherTiles_GH/blob/master/app_img/sort.png)
-![Search](https://github.com/exc414/WeatherTiles_GH/blob/master/app_img/search.png) ![Settings](https://github.com/exc414/WeatherTiles_GH/blob/master/app_img/settings.png)
+![Tiles](app_img/tiles.png?raw=true "Tiles"  width="300") ![Sort](app_img/sort.png?raw=true "Sort"  width="300")
+![Search](app_img/search.png?raw=true "Search"  width="300") ![Settings](app_img/settings.png?raw=true "Settings"  width="300")
 
 <br>
 
@@ -71,6 +69,7 @@ WEATHER_BIT_API_KEY="YOUR-API-KEY-HERE"
 * [Leak Canary](https://github.com/square/leakcanary) - A memory leak detection library
 * [Stetho](https://github.com/facebook/stetho) - Stetho is a debug bridge for Android applications
 * [Realm](https://github.com/realm/realm-java) - Realm is a mobile database
+* [Android Job](https://github.com/evernote/android-job) - Android library to handle jobs in the background.
 
 <br>
 

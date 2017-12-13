@@ -60,8 +60,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<Cities>
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.suggestion_row, parent, false);
 
-            holder.txtCity = (TextView) convertView.findViewById(R.id.txtCity);
-            holder.txtRegionCountry = (TextView) convertView.findViewById(R.id.txtRegionCountry);
+            holder.txtCity = convertView.findViewById(R.id.txtCity);
+            holder.txtRegionCountry = convertView.findViewById(R.id.txtRegionCountry);
 
             convertView.setTag(holder);
         }

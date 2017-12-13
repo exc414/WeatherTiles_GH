@@ -7,7 +7,6 @@ import android.view.View;
 /**
  * @author Carlos A. Perez
  */
-
 public class TileDecorator extends RecyclerView.ItemDecoration
 {
     private int padding;

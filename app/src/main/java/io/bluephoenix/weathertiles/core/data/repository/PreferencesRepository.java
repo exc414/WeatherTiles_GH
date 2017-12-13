@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import io.bluephoenix.weathertiles.core.common.SortDef;
 import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
 import io.bluephoenix.weathertiles.core.common.TempScaleDef;
-import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScaleType;
+import io.bluephoenix.weathertiles.core.common.TempScaleDef.TempScale;
 import io.bluephoenix.weathertiles.util.Constant;
 
 /**
@@ -29,7 +29,7 @@ public class PreferencesRepository implements IRepository.Preferences
     }
 
     @Override
-    public void setDefaultTempScale(@TempScaleType int tempScale)
+    public void setDefaultTempScale(@TempScale int tempScale)
     {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(tempScaleKey, tempScale);

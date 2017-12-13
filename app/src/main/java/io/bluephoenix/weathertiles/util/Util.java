@@ -51,6 +51,11 @@ public class Util
         return metrics.heightPixels;
     }
 
+    public static float getScreenHeightInPixelsNoToolbarOrStatusbar()
+    {
+        return (metrics.heightPixels - (getPixelFromDP(56) + getPixelFromDP(24)));
+    }
+
     /**
      * Calculates a dp value into pixels for the current device.
      * @param dp A virtual pixel unit that you should use when defining UI layout.
@@ -59,6 +64,16 @@ public class Util
     public static int getPixelFromDP(int dp)
     {
         return (int) (dp * metrics.density);
+    }
+
+    /**
+     * Calculates a dp value into pixels for the current device.
+     * @param dp A virtual pixel unit that you should use when defining UI layout.
+     * @return a float with the number of pixels.
+     */
+    public static float getPixelFromDP(float dp)
+    {
+        return (dp * metrics.density);
     }
 
     /**
@@ -72,13 +87,13 @@ public class Util
         //therefore it must be recalculate. Unlike the density above.
         float width = Resources.getSystem().getDisplayMetrics().widthPixels;
 
-        //Magic number 8 - represents the addition of left + right margins given to the
-        //entire screen in the top parent layout. Subtract it from the total width
-        //of the screen so as to not skew the tile width calculation.
-        float margin = 8f * metrics.density; //convert to pixels
+        //Magic number 4 - represents the addition of left + right margins given to the
+        //entire screen in the top parent layout (recyclerView). Subtract it from the
+        //total width of the screen so as to not skew the tile width calculation.
+        float margin = 4f * metrics.density; //convert to pixels
+        float adjustWidthForMargin = width - margin;
 
-        //return (width - margin) / columns;
-        return (width / columns) - margin;
+        return (adjustWidthForMargin / columns);
     }
 
     /**
@@ -185,6 +200,19 @@ public class Util
      */
     public static long getStartOfDayInSeconds() { return getStartOfDayInMillis() / 1000; }
 
+    public static long getStartOfDayInSecondsBasedOnDefaultTimeZone()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getDefault());
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTimeInMillis() / 1000;
+    }
+
     public static void toastMaker(String input)
     {
         Toast.makeText(App.getInstance(), input, Toast.LENGTH_SHORT).show();
@@ -236,10 +264,10 @@ public class Util
     }
 
     /**
-     *
-     * @param activity
-     * @param appName
-     * @return
+     * Create an intent to share an application.
+     * @param activity An activity is a single, focused thing that the user can do.
+     * @param appName  A string with the name of the application to share.
+     * @return an intent with the app sharing information.
      */
     public static Intent shareApp(Activity activity, String appName)
     {
@@ -254,17 +282,35 @@ public class Util
     }
 
     /**
-     *
-     * @param appName
-     * @return
+     * Create an intent to leave feedback about the application.
+     * @param appName A string with the name of the application to share.
+     * @return an intent which shares the application.
      */
     public static Intent leaveFeedback(String appName)
     {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.setData(Uri.parse("mailto:")); //only email apps should handle this
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"androidbluephoenix@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, appName + " Feedback");
         return intent;
+    }
+
+    public static String getDayOfWeekAsStr(int dayOfWeek)
+    {
+        //Adjust once days get past total day count
+        if(dayOfWeek > 7) { dayOfWeek -= 7; }
+
+        switch(dayOfWeek)
+        {
+            case 1: return "SUN";
+            case 2: return "MON";
+            case 3: return "TUE";
+            case 4: return "WED";
+            case 5: return "THU";
+            case 6: return "FRI";
+            case 7: return "SAT";
+            default: return null;
+        }
     }
 
     /**

@@ -33,6 +33,8 @@
     <!-- Tile Colors Day/Night -->
     <color name="sunYellow">#FAAD00</color>
     <color name="moonBlue">#0097FF</color>
+    <color name="moonBlueDarker">#296DA2</color>
+    <color name="sunYellowDarker">#A27929</color>
     <color name="dayNight">#0097FF</color>
 
 </resources>

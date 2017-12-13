@@ -5,38 +5,22 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 
 import io.bluephoenix.weathertiles.R;
+import io.bluephoenix.weathertiles.util.Constant;
 import io.bluephoenix.weathertiles.util.Util;
 
 /**
  * @author Carlos A. Perez Zubizarreta
  */
-public class WeatherView extends View
+public class WeatherView extends BaseView
 {
     //Tile ID
     private long cityId;
 
-    //Degree symbol
-    private static final String degreeSymbol = "\u00B0";
-
-    //Custom font for the view
-    private final String PATH_TO_WEATHER_FONT = "fonts/weather.ttf";
-    private final String PATH_TO_MONTSERRAT_REGULAR_FONT = "fonts/Montserrat-Regular.ttf";
-    private final String PATH_TO_MONTSERRAT_SEMIBOLD_FONT = "fonts/Montserrat-SemiBold.ttf";
-
-    //Typefaces (font)
-    private Typeface weatherIconTypeface;
-    private Typeface montserratRegular;
-    private Typeface montserratSemiBold;
-
     private final int defColor = Util.getColorFromResource(R.color.colorAccent);
-    private final int defTextSize = 16; //DP
-    //private final int defShapeColor = Color.parseColor("#00000000");
 
     //Depending on the size of the device set the correct number of columns.
     //3 default, 5 and 7 for 600dp and 820dp respectively.
@@ -48,14 +32,9 @@ public class WeatherView extends View
     private float centerWidth;
 
     //Content values
-    private String weatherIconContent = "";
     private String tempContent = "";
     private String cityContent = "";
     private String countryContent = "";
-
-    //Neutral icon qualifier.
-    //Day or Night is set in the timeOfDay setter.
-    private String timeOfDayContent = "wi_owm_";
 
     //Font sizes based on DP NOT SP
     private int weatherIconTextSize = 0;
@@ -96,7 +75,8 @@ public class WeatherView extends View
     //Keeps track the total item height
     private float runningHeight = 0;
 
-    //Margin Offset
+    //Margin/Padding offset. Takes into consideration the amount of padding the
+    //inside tiles have.
     private int marginOffset;
 
     /**
@@ -138,10 +118,13 @@ public class WeatherView extends View
      */
     private void init(Context context, AttributeSet attrs)
     {
+        int defTextSize = 16;
         //Get all the values set in the xml file.
-        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WeatherView, 0, 0);
+        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WeatherView,
+                0, 0);
 
         weatherIconContent = ta.getString(R.styleable.WeatherView_weatherIconContent);
+
         weatherIconTextSize = ta.getDimensionPixelSize(
                 R.styleable.WeatherView_weatherIconTextSize, defTextSize);
         weatherIconColor = ta.getColor(R.styleable.WeatherView_weatherIconColor, defColor);
@@ -173,15 +156,12 @@ public class WeatherView extends View
         //Total margin offset - adds all the tile margins plus the parent margins
         marginOffset = ta.getDimensionPixelSize(R.styleable.WeatherView_marginOffset, 0);
 
-        //Set custom fonts
-        weatherIconTypeface = Typeface.createFromAsset(context.getAssets(),
-                PATH_TO_WEATHER_FONT);
-        montserratRegular = Typeface.createFromAsset(context.getAssets(),
-                PATH_TO_MONTSERRAT_REGULAR_FONT);
-        montserratSemiBold = Typeface.createFromAsset(context.getAssets(),
-                PATH_TO_MONTSERRAT_SEMIBOLD_FONT);
+        //TypedArrays are heavyweight objects that should be recycled immediately
+        //after all the attributes you need have been extracted.
+        ta.recycle();
 
         //Order matters paint properties must be set before calculating the height
+        setTypefaces(context);
         setPaintProperties();
         setWidth();
         setHeight();
@@ -320,17 +300,6 @@ public class WeatherView extends View
         canvas.drawText(countryContent, centerWidth, runningHeight, countryTextPaint);
     }
 
-    //Delete element from array.
-    private String[] deleteElement(String[] original, int element)
-    {
-        String[] stringArr = new String[original.length - 1];
-        System.arraycopy(original, 0, stringArr, 0, element);
-        System.arraycopy(original, element + 1,
-                stringArr, element, original.length - element - 1);
-        return stringArr;
-    }
-
-
     public long getCityId()
     {
         return cityId;
@@ -346,12 +315,14 @@ public class WeatherView extends View
      * If the weatherIconContent value is empty don't try to get a resource.
      * The default value of timeOfDayContent is the neutral - wi_owm_.
      *
-     * @param weatherIconContentSet resource id number to look up.
+     * @param weatherId a int which determines the type of weather icon shown.
      * @param isDayTime a boolean whether the icon should be painted
      *                  yellow (day) or blue (night)
      */
-    public void setWeatherIconContent(String weatherIconContentSet, boolean isDayTime)
+    public void setWeatherIconContent(int weatherId, boolean isDayTime)
     {
+        String timeOfDayContent;
+
         if(isDayTime)
         {
             timeOfDayContent = "wi_owm_day_";
@@ -363,14 +334,7 @@ public class WeatherView extends View
             weatherTextPaint.setColor(Util.getColorFromResource(R.color.moonBlue));
         }
 
-        if(!weatherIconContentSet.isEmpty())
-        {
-            weatherIconContentSet = (getContext().getString(getResources()
-                    .getIdentifier(timeOfDayContent + weatherIconContentSet, "string",
-                            getContext().getPackageName())));
-        }
-
-        weatherIconContent = weatherIconContentSet;
+        setWeatherIcon(timeOfDayContent, weatherId);
         weatherTextPaint.getTextBounds(weatherIconContent, 0, weatherIconContent.length(),
                 weatherBounds);
     }
@@ -381,7 +345,7 @@ public class WeatherView extends View
      */
     public void setTempContent(int tempContentSet)
     {
-        this.tempContent = String.valueOf(tempContentSet) + degreeSymbol;
+        this.tempContent = String.valueOf(tempContentSet) + Constant.degreeSymbol;
         tempTextPaint.getTextBounds(tempContent, 0, tempContent.length(), tempBounds);
     }
 

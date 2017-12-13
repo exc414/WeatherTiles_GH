@@ -15,26 +15,17 @@ public class ForecastParser
 {
     public static Tile parseResponse(ApiResponseCurrent response, long cityId)
     {
-        //Make tile object to be saved in the Tile table. This is used in the WeatherActivity.
-        Double lat = Double.valueOf(response.getData().get(0).getLat());
-        Double lon = Double.valueOf(response.getData().get(0).getLon());
-
         Tile tile = new Tile();
         tile.setCityId(cityId);
-        tile.setWeatherId(response.getData().get(0).getWeatherCurrent().getWeatherId());
-        tile.setTempCelsius((int) Math.round(response.getData().get(0).getTemp()));
-        tile.setLat(lat);
-        tile.setLon(lon);
-        tile.setDescription(response.getData().get(0).getWeatherCurrent().getDescription());
-        tile.setTimeZone(response.getData().get(0).getTimezone());
-
-        tile.setDayTime(
-                SunriseSunset.isDayTime(tile.getLat(), tile.getLon(), tile.getTimeZone()));
-        tile.setSunrise(SunriseSunset.getSunrise());
-        tile.setSunset(SunriseSunset.getSunset());
-
-        tile.setCity(response.getData().get(0).getCityName());
-        tile.setCountryIso(response.getData().get(0).getCountryCode());
+        tile.setWeatherId(response.getWeather().get(0).getWeatherId());
+        tile.setTemp((int) Math.round(response.getMain().getTemp()));
+        tile.setHumidity(response.getMain().getHumidity());
+        tile.setWind(response.getWind().getSpeed());
+        tile.setLat(response.getCoord().getLat());
+        tile.setLon(response.getCoord().getLon());
+        tile.setDescription(response.getWeather().get(0).getDescription());
+        tile.setCityName(response.getCityName());
+        tile.setCountryIso(response.getCountryCode().getCountryCode());
 
         return tile;
     }
@@ -44,7 +35,7 @@ public class ForecastParser
      * @param response a payload of parsed json.
      * @return a list of tile details objects.
      */
-    public static List<TileDetail> parseResponse(ApiResponseFiveDay response)
+    public static List<TileDetail> parseResponse(ApiResponseFiveDay response, long cityId)
     {
         int size = response.getList().size();
         List<TileDetail> tileDetailList = new ArrayList<>(size);
@@ -57,28 +48,24 @@ public class ForecastParser
             for(int i = 0; i < size; i++)
             {
                 tileDetail = new TileDetail();
-                tileDetail.setCityId(response.getCity().getCityId());
+                tileDetail.setCityId(cityId);
 
-                tileDetail.setWeatherId(String.valueOf(response.getList().get(i)
-                        .getWeather().get(0).getWeatherId()));
+                tileDetail.setWeatherId(response.getList().get(i)
+                        .getWeather().get(0).getWeatherId());
 
-                temp = (int) Math.round(
-                        response.getList().get(i).getMain().getTemp());
+                temp = (int) Math.round(response.getList().get(i).getMain().getTemp());
                 tileDetail.setTemperature(temp);
 
-                tileDetail.setHumidity(Math.round(
-                        response.getList().get(i).getMain().getHumidity()));
+                tileDetail.setHumidity(Math.round(response.getList().get(i)
+                        .getMain().getHumidity()));
 
-                tileDetail.setWind(Math.round(
-                        response.getList().get(i).getWind().getSpeed()));
-
-                //Timestamp is in UTC and seconds NOT milliseconds.
+                tileDetail.setWind(response.getList().get(i).getWind().getSpeed());
                 tileDetail.setTimestamp(response.getList().get(i).getTimestamp());
 
                 try
                 {
                     //This could completely null therefore catch and set to 0 if so.
-                    tileDetail.setRainFall3h((float)
+                    tileDetail.setRainFall3h(
                             response.getList().get(i).getRain().getRainFall3h());
                 }
                 catch(NullPointerException ex)

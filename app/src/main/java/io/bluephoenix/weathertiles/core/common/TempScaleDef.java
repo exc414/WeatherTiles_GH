@@ -13,7 +13,7 @@ public class TempScaleDef
 {
     @IntDef({ CELSIUS, FAHRENHEIT })
     @Retention(RetentionPolicy.SOURCE)
-    public @interface TempScaleType { }
+    public @interface TempScale { }
     public static final int CELSIUS = 0;
     public static final int FAHRENHEIT = 1;
 }

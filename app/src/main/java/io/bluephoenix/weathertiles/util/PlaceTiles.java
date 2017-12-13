@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.bluephoenix.weathertiles.core.common.Operator;
 import io.bluephoenix.weathertiles.core.common.SortDef;
+import io.bluephoenix.weathertiles.core.common.SortDef.SortType;
 import io.bluephoenix.weathertiles.core.data.model.db.Tile;
 
 /**
@@ -24,7 +25,7 @@ public class PlaceTiles
      * @return         an int detonating the position the tile needs to be place in the
      *                 list for it to be still sorted after insertion.
      */
-    public static int place(@SortDef.SortType int sortType, Tile tile, List<Tile> tileList)
+    public static int place(@SortType int sortType, Tile tile, List<Tile> tileList)
     {
         if(tileList.size() == 0) { return 0; }
         int start = 0;
@@ -39,45 +40,45 @@ public class PlaceTiles
             case SortDef.NOSORT: return lastPosition;
 
             case SortDef.TEMP_ASCENDING:
-                result = preCheckTemp(tile.getTempCelsius(), tileList,
+                result = preCheckTemp(tile.getTemp(), tileList,
                         start, end, Operator.LTE, Operator.GTE);
 
                 return (result == NEEDS_PLACEMENT) ?
-                        tilePlacement(tile.getTempCelsius(), tileList,
+                        tilePlacement(tile.getTemp(), tileList,
                         start, end, sortType, Operator.GTE, Operator.LT) : result;
 
             case SortDef.TEMP_DESCENDING:
-                result = preCheckTemp(tile.getTempCelsius(), tileList,
+                result = preCheckTemp(tile.getTemp(), tileList,
                         start, end, Operator.GTE, Operator.LTE);
 
                 return (result == NEEDS_PLACEMENT) ?
-                        tilePlacement(tile.getTempCelsius(), tileList,
+                        tilePlacement(tile.getTemp(), tileList,
                         start, end, sortType, Operator.LTE, Operator.GT) : result;
 
             case SortDef.DAYTIME:
-                return (tile.getDayTime() == false) ? lastPosition :
+                return (tile.getIsDayTime() == false) ? lastPosition :
                         tilePlacement(daytime, tileList,  start, end, sortType,
                         Operator.EQ, Operator.NEQ);
 
             case SortDef.NIGHTTIME:
-                return (tile.getDayTime() == true) ? lastPosition :
+                return (tile.getIsDayTime() == true) ? lastPosition :
                         tilePlacement(nighttime, tileList, start, end, sortType,
                                 Operator.EQ, Operator.NEQ);
 
             case SortDef.ALPHABETICALLY_ASCENDING:
-                result = preCheckCityName(tile.getCity(), tileList, start, end,
+                result = preCheckCityName(tile.getCityName(), tileList, start, end,
                         Operator.LTE, Operator.GTE);
 
                 return (result == NEEDS_PLACEMENT) ?
-                        tilePlacement(tile.getCity(), tileList, start, end,
+                        tilePlacement(tile.getCityName(), tileList, start, end,
                                 Operator.GTE, Operator.LT) : result;
 
             case SortDef.ALPHABETICALLY_DESCENDING:
-                result = preCheckCityName(tile.getCity(), tileList, start, end,
+                result = preCheckCityName(tile.getCityName(), tileList, start, end,
                         Operator.GTE, Operator.LTE);
 
                 return (result == NEEDS_PLACEMENT) ?
-                        tilePlacement(tile.getCity(), tileList, start, end,
+                        tilePlacement(tile.getCityName(), tileList, start, end,
                                 Operator.LTE, Operator.GT) : result;
 
             default: return lastPosition;
@@ -104,8 +105,8 @@ public class PlaceTiles
     private static int preCheckTemp(int temp, List<Tile> tl, int start, int end,
                                     Operator op1, Operator op2)
     {
-        if(op1.apply(temp, tl.get(start).getTempCelsius())) { return start; }
-        else if(op2.apply(temp, tl.get(end).getTempCelsius())) { return lastPosition; }
+        if(op1.apply(temp, tl.get(start).getTemp())) { return start; }
+        else if(op2.apply(temp, tl.get(end).getTemp())) { return lastPosition; }
         else { return NEEDS_PLACEMENT; }
     }
 
@@ -169,8 +170,8 @@ public class PlaceTiles
     private static int preCheckCityName(String value, List<Tile> tl, int start, int end,
                                         Operator op1, Operator op2)
     {
-        if(op1.apply(compare(value, tl.get(start).getCity()), 0)) { return start; }
-        else if(op2.apply(compare(value, tl.get(end).getCity()), 0)) { return lastPosition; }
+        if(op1.apply(compare(value, tl.get(start).getCityName()), 0)) { return start; }
+        else if(op2.apply(compare(value, tl.get(end).getCityName()), 0)) { return lastPosition; }
         else { return NEEDS_PLACEMENT; }
     }
 
@@ -213,12 +214,12 @@ public class PlaceTiles
         {
             int mid = start + (end - start) / 2;
 
-            if(op1.apply(compare(value, tl.get(mid).getCity()), 0)
-                    && op2.apply(compare(value, tl.get(mid + 1).getCity()), 0))
+            if(op1.apply(compare(value, tl.get(mid).getCityName()), 0)
+                    && op2.apply(compare(value, tl.get(mid + 1).getCityName()), 0))
             {
                 return mid + 1;
             }
-            else if(op2.apply(compare(value, tl.get(mid).getCity()), 0))
+            else if(op2.apply(compare(value, tl.get(mid).getCityName()), 0))
             {
                 end = mid - 1;
             }

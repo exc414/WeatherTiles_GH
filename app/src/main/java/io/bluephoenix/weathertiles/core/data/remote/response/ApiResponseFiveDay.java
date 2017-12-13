@@ -49,9 +49,6 @@ public class ApiResponseFiveDay
         @SerializedName("weather")
         @Expose
         private java.util.List<Weather> weather = null;
-        @SerializedName("clouds")
-        @Expose
-        private Clouds clouds;
 
         @SerializedName("wind")
         @Expose
@@ -89,16 +86,6 @@ public class ApiResponseFiveDay
         public void setWeather(java.util.List<Weather> weather)
         {
             this.weather = weather;
-        }
-
-        public Clouds getClouds()
-        {
-            return clouds;
-        }
-
-        public void setClouds(Clouds clouds)
-        {
-            this.clouds = clouds;
         }
 
         public Wind getWind()
@@ -166,14 +153,6 @@ public class ApiResponseFiveDay
             @Expose
             private double temp;
 
-            @SerializedName("temp_min")
-            @Expose
-            private double tempMin;
-
-            @SerializedName("temp_max")
-            @Expose
-            private double tempMax;
-
             @SerializedName("humidity")
             @Expose
             private int humidity;
@@ -188,26 +167,6 @@ public class ApiResponseFiveDay
                 this.temp = temp;
             }
 
-            public double getTempMin()
-            {
-                return tempMin;
-            }
-
-            public void setTempMin(double tempMin)
-            {
-                this.tempMin = tempMin;
-            }
-
-            public double getTempMax()
-            {
-                return tempMax;
-            }
-
-            public void setTempMax(double tempMax)
-            {
-                this.tempMax = tempMax;
-            }
-
             public int getHumidity()
             {
                 return humidity;
@@ -216,23 +175,6 @@ public class ApiResponseFiveDay
             public void setHumidity(int humidity)
             {
                 this.humidity = humidity;
-            }
-        }
-
-        public class Clouds
-        {
-            @SerializedName("all")
-            @Expose
-            private int cloudiness;
-
-            public int getCloudiness()
-            {
-                return cloudiness;
-            }
-
-            public void setCloudiness(int cloudiness)
-            {
-                this.cloudiness = cloudiness;
             }
         }
 

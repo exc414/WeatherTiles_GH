@@ -17,7 +17,6 @@
     <string name="about_weather_icons">Weather Icons</string>
     <string name="about_owm_api">Open Weather Map API</string>
     <string name="about_btn_visit_api">VISIT</string>
-    <string name="about_wb_api">Weatherbit API</string>
     <string name="about_more_apps">More Apps</string>
 
     <!-- ========================== Placeholders ================================== -->

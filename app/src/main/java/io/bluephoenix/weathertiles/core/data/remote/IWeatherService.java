@@ -13,15 +13,15 @@ import retrofit2.http.Query;
 public interface IWeatherService
 {
     /**
-     * Query by providing the city of identification number.
-     * Unlike the Open Weather Map the cityId must be given as a string
-     * instead of a number.
+     * Query by providing the exact ID of the city/region.
+     * Gives at the moment data. Most accurate and detailed data.
+     * This uses Open Weather Map API.
      *
-     * @param id a string containing the identification number of the city.
-     * @return a Completable Future object with the parsed JSON.
+     * @param id an int of the city/region
+     * @return an ApiResponseCurrent with which you can make a tile object
      */
-    @GET("current/city?key=" + BuildConfig.WEATHER_BIT_API_KEY)
-    Call<ApiResponseCurrent> getCurrentWeatherByID(@Query("city_id") String id);
+    @GET("weather?units=metric&apikey=" + BuildConfig.OPEN_WEATHER_API_KEY)
+    Call<ApiResponseCurrent> getCurrentWeatherByID(@Query("id") long id);
 
     /**
      * Query by providing the exact ID of the city/region
@@ -31,20 +31,6 @@ public interface IWeatherService
      * @param id a long containing the identification number of the city.
      * @return a Completable Future object with the parsed JSON.
      */
-    //@GET("forecast?units=metric&apikey=" + BuildConfig.OPEN_WEATHER_API_KEY)
-    //Call<ApiResponseFiveDay> getFiveDayForecastById(@Query("id") long id);
-
     @GET("forecast?units=metric&apikey=" + BuildConfig.OPEN_WEATHER_API_KEY)
     Call<ApiResponseFiveDay> getFiveDayForecastById(@Query("id") long id);
-
-    /**
-     * Query by providing the exact ID of the city/region.
-     * Gives at the moment data. Most accurate and detailed data.
-     * This ues Open Weather Map API.
-     *
-     * @param id an int of the city/region
-     * @return an ApiResponseCurrent with which you can make a tile object
-     */
-    //@GET("weather?units=metric&apikey=" + BuildConfig.OPEN_WEATHER_API_KEY)
-    //Call<ApiResponseFiveDay> getCurrentWeatherByID(@Query("id") String id);
 }

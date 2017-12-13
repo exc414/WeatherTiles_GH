@@ -14,7 +14,7 @@ class RetrofitClient
 
     /**
      * Singleton Retrofit client to perform request with.
-     * For use with Weatherbit.
+     * For use with Open Weather Map.
      *
      * @param baseUrl String containing url
      * @return a retrofit instance if one is not made already

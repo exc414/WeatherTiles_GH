@@ -38,7 +38,7 @@ import io.bluephoenix.weathertiles.ui.adapters.WeatherAdapter;
 import io.bluephoenix.weathertiles.ui.dialogs.Dialogs;
 import io.bluephoenix.weathertiles.ui.dialogs.DialogsPublish;
 import io.bluephoenix.weathertiles.ui.views.SnackView;
-import io.bluephoenix.weathertiles.ui.views.reyclerview.GLMWithSmoothScroller;
+import io.bluephoenix.weathertiles.ui.views.reyclerview.GLMWeather;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.TileDecorator;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.TileItemAnimator;
 import io.bluephoenix.weathertiles.ui.views.reyclerview.WeatherRecyclerView;
@@ -76,7 +76,7 @@ public class WeatherActivity extends BaseActivity implements
 
     private WeatherPresenter presenter;
     private WeatherAdapter weatherAdapter;
-    private GLMWithSmoothScroller glmWithSmoothScroller;
+    private GLMWeather glmWeather;
 
     private String appName = "Weather Tiles";
     private final int SEARCH_ACTIVITY_RESULT = 1500;
@@ -113,10 +113,10 @@ public class WeatherActivity extends BaseActivity implements
         weatherAdapter = new WeatherAdapter(this);
         weatherAdapter.registerOnTilePublishCallback(this);
 
-        glmWithSmoothScroller = new GLMWithSmoothScroller(this, gridColumns,
+        glmWeather = new GLMWeather(this, gridColumns,
                 Constant.NORMAL_SCROLL_SPEED);
 
-        weatherRecyclerView.setLayoutManager(glmWithSmoothScroller);
+        weatherRecyclerView.setLayoutManager(glmWeather);
         weatherRecyclerView.setAdapter(weatherAdapter);
         weatherRecyclerView.setItemAnimator(new TileItemAnimator());
         weatherRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(
@@ -152,7 +152,7 @@ public class WeatherActivity extends BaseActivity implements
     {
         presenter = (WeatherPresenter) getLastCustomNonConfigurationInstance();
         if(presenter == null) { presenter = new WeatherPresenter(sharedPreferences); }
-        presenter.attachView(this);
+        presenter.attachView(this, Constant.REGISTER_BUS);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class WeatherActivity extends BaseActivity implements
         if(!Realm.getDefaultInstance().isClosed())
         { Realm.getDefaultInstance().close(); }
 
-        presenter.detachView();
+        presenter.detachView(Constant.DEREGISTER_BUS);
         super.onDestroy();
     }
 
@@ -307,10 +307,6 @@ public class WeatherActivity extends BaseActivity implements
                  Util.openAppInMarket(this, Constant.APP_UNINSTALLER);
                  return true;
 
-            case R.id.clearHandset:
-                 Util.openAppInMarket(this, Constant.CLEAR_HANDSET);
-                 return true;
-
             case R.id.stressCPU:
                  Util.openAppInMarket(this, Constant.STRESS_CPU);
                  return true;
@@ -370,7 +366,7 @@ public class WeatherActivity extends BaseActivity implements
     public void addTile(Tile tile)
     {
         weatherAdapter.addTile(tile, presenter.getDefaultSort(), gridColumns,
-                weatherRecyclerView, glmWithSmoothScroller,
+                weatherRecyclerView, glmWeather,
                 presenter.getNewTileBehaviourFlags());
     }
 

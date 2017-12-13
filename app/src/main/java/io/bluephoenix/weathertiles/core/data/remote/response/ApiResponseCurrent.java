@@ -10,53 +10,166 @@ import java.util.List;
  */
 public class ApiResponseCurrent
 {
-    @SerializedName("data")
+    @SerializedName("id")
     @Expose
-    private List<Data> data = null;
+    private int cityId;
 
-    public List<Data> getData()
+    @SerializedName("coord")
+    @Expose
+    private Coordinates coord;
+
+    @SerializedName("weather")
+    @Expose
+    private List<Weather> weather = null;
+
+    @SerializedName("main")
+    @Expose
+    private Main main;
+
+    @SerializedName("wind")
+    @Expose
+    private Wind wind;
+
+    @SerializedName("dt")
+    @Expose
+    private int timestamp;
+
+    @SerializedName("sys")
+    @Expose
+    private CountryCode countryCode;
+
+    @SerializedName("name")
+    @Expose
+    private String cityName;
+
+    public int getCityId()
     {
-        return data;
+        return cityId;
     }
 
-    public void setData(List<Data> data)
+    public void setCityId(int cityId)
     {
-        this.data = data;
+        this.cityId = cityId;
     }
 
-    public class Data
+    public Coordinates getCoord()
+    {
+        return coord;
+    }
+
+    public void setCoord(Coordinates coord)
+    {
+        this.coord = coord;
+    }
+
+    public List<Weather> getWeather()
+    {
+        return weather;
+    }
+
+    public void setWeather(List<Weather> weather)
+    {
+        this.weather = weather;
+    }
+
+    public Main getMain()
+    {
+        return main;
+    }
+
+    public void setMain(Main main)
+    {
+        this.main = main;
+    }
+
+    public Wind getWind()
+    {
+        return wind;
+    }
+
+    public void setWind(Wind wind)
+    {
+        this.wind = wind;
+    }
+
+    public int getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp)
+    {
+        this.timestamp = timestamp;
+    }
+
+    public CountryCode getCountryCode()
+    {
+        return countryCode;
+    }
+
+    public void setCountryCode(CountryCode countryCode)
+    {
+        this.countryCode = countryCode;
+    }
+
+    public String getCityName()
+    {
+        return cityName;
+    }
+
+    public void setCityName(String cityName)
+    {
+        this.cityName = cityName;
+    }
+
+    public class Weather
+    {
+        @SerializedName("id")
+        @Expose
+        private int weatherId;
+
+        @SerializedName("main")
+        @Expose
+        private String mainWeather;
+
+        @SerializedName("description")
+        @Expose
+        private String description;
+
+        public int getWeatherId() { return weatherId; }
+
+        public void setWeatherId(int weatherId) { this.weatherId = weatherId; }
+
+        public String getDescription()
+        {
+            return description;
+        }
+
+        public void setDescription(String description)
+        {
+            this.description = description;
+        }
+
+        public String getMainWeather()
+        {
+            return mainWeather;
+        }
+
+        public void setMainWeather(String mainWeather)
+        {
+            this.mainWeather = mainWeather;
+        }
+    }
+
+    public class Main
     {
         @SerializedName("temp")
         @Expose
         private double temp;
 
-        @SerializedName("ts")
+        @SerializedName("humidity")
         @Expose
-        private long timestamp;
-
-        @SerializedName("lat")
-        @Expose
-        private String lat;
-
-        @SerializedName("lon")
-        @Expose
-        private String lon;
-
-        @SerializedName("timezone")
-        @Expose
-        private String timezone;
-
-        @SerializedName("city_name")
-        @Expose
-        private String cityName;
-
-        @SerializedName("country_code")
-        @Expose
-        private String countryCode;
-
-        @SerializedName("weather")
-        @Expose
-        private WeatherCurrent weatherCurrent;
+        private int humidity;
 
         public double getTemp()
         {
@@ -68,55 +181,70 @@ public class ApiResponseCurrent
             this.temp = temp;
         }
 
-        public long getTimestamp()
+        public int getHumidity()
         {
-            return timestamp;
+            return humidity;
         }
 
-        public void setTimestamp(long timestamp)
+        public void setHumidity(int humidity)
         {
-            this.timestamp = timestamp;
+            this.humidity = humidity;
+        }
+    }
+
+    public class Wind
+    {
+        @SerializedName("speed")
+        @Expose
+        private double speed;
+
+        public double getSpeed()
+        {
+            return speed;
         }
 
-        public String getLat()
+        public void setSpeed(double speed)
+        {
+            this.speed = speed;
+        }
+    }
+
+    public class Coordinates
+    {
+        @SerializedName("lat")
+        @Expose
+        private double lat;
+
+        @SerializedName("lon")
+        @Expose
+        private double lon;
+
+        public double getLat()
         {
             return lat;
         }
 
-        public void setLat(String lat)
+        public void setLat(Double lat)
         {
             this.lat = lat;
         }
 
-        public String getLon()
+        public double getLon()
         {
             return lon;
         }
 
-        public void setLon(String lon)
+        public void setLon(double lon)
         {
             this.lon = lon;
         }
+    }
 
-        public String getTimezone()
-        {
-            return timezone;
-        }
-
-        public void setTimezone(String timezone)
-        {
-            this.timezone = timezone;
-        }
-
-        public String getCityName()
-        {
-            return cityName;
-        }
-
-        public void setCityName(String cityName)
-        {
-            this.cityName = cityName;
-        }
+    public class CountryCode
+    {
+        @SerializedName("country")
+        @Expose
+        private String countryCode;
 
         public String getCountryCode()
         {
@@ -126,47 +254,6 @@ public class ApiResponseCurrent
         public void setCountryCode(String countryCode)
         {
             this.countryCode = countryCode;
-        }
-
-        public WeatherCurrent getWeatherCurrent()
-        {
-            return weatherCurrent;
-        }
-
-        public void setWeatherCurrent(WeatherCurrent weatherCurrent)
-        {
-            this.weatherCurrent = weatherCurrent;
-        }
-    }
-
-    public class WeatherCurrent
-    {
-        @SerializedName("code")
-        @Expose
-        private String weatherId;
-
-        @SerializedName("description")
-        @Expose
-        private String description;
-
-        public String getWeatherId()
-        {
-            return weatherId;
-        }
-
-        public void setWeatherId(String weatherId)
-        {
-            this.weatherId = weatherId;
-        }
-
-        public String getDescription()
-        {
-            return description;
-        }
-
-        public void setDescription(String description)
-        {
-            this.description = description;
         }
     }
 }
